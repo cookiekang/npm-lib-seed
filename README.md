@@ -1,2 +1,2 @@
 # npm-seed
-a seed project for build npm package
+a seed project for build npm package.
