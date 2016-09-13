@@ -11,6 +11,7 @@ const colors = require('colors')
 const pkg = require('../package.json')
 const path = require('path')
 const babelrc = require('babelrc-rollup').default
+
 colors.setTheme({
   silly: 'rainbow',
   input: 'grey',
@@ -21,7 +22,7 @@ colors.setTheme({
   help: 'cyan',
   warn: 'yellow',
   debug: 'blue',
-  error: 'red'
+  error: 'red',
 })
 let promise = Promise.resolve()
 
@@ -31,18 +32,17 @@ promise = promise.then(() => del(['dist/*']))
 console.log('您当前打包的模块是 '.info + pkg.name.blue)
 console.log('当前版本号是: '.info + pkg.version.blue)
 console.log('当前模块所依赖的外部包: '.info)
-for (var key in pkg.dependencies) {
-  if (pkg.dependencies.hasOwnProperty(key)) {
-    console.log(key.blue)
-  }
-}
 
-var banner =
+Object.keys(pkg.dependencies).forEach(key => {
+  console.log(key.blue)
+})
+
+const banner =
   '/*!\n' +
   ' * ' + pkg.name + '.js v' + pkg.version + '\n' +
   ' */'
 
-function getConfig (format) {
+function getConfig(format) {
   return {
     entry: 'src/index.js',
     format: format === 'min' ? 'umd' : format,
@@ -51,71 +51,77 @@ function getConfig (format) {
     env: format === 'min' ? 'production' : 'development',
     moduleName: format === 'umd' ? pkg.name : undefined,
     sourceMap: true,
-    external: Object.keys(pkg.dependencies)
+    external: Object.keys(pkg.dependencies),
   }
 }
 
-promise.then(() => {
-  if (!fs.existsSync(path.resolve('./dist'))) {
-    fs.mkdirSync(path.resolve('./dist'))
-  }
-  build(['es', 'cjs', 'umd', 'min'])
-})
+function getSize(code) {
+  return ((code.length ? code.length : code) / 1024).toFixed(2) + 'kb'
+}
 
-function build (builds) {
-  var built = 0
-  var total = builds.length
-
-  next()
-  function next () {
-    buildEntry(getConfig(builds[built])).then(function () {
-      built++
-      if (built < total) {
-        next()
+function write(dest, code) {
+  return new Promise((resolve, reject) => {
+    fs.writeFile(dest, code, err => {
+      if (!err) {
+        console.log(dest.info + ' ' + getSize(code).blue)
+        resolve()
       } else {
-        doFinal()
+        reject(err)
       }
-    }).catch(logError)
+    })
+  })
+}
+
+function zip(file) {
+  return function () {
+    fs.readFile(file, (err, buf) => {
+      gzipSize(buf, (error, size) => {
+        console.log('当前模块gzip后的大小为(不包括依赖的外部包): '.info + getSize(size).blue)
+      })
+    })
   }
 }
 
-function buildEntry (opts) {
-  var plugins = [
+function logError(e) {
+  console.log(e)
+}
+
+function buildEntry(opts) {
+  const plugins = [
     json(),
-    babel(babelrc())
+    babel(babelrc()),
   ]
   console.log(opts.format)
   return rollup.rollup({
     entry: opts.entry,
-    plugins: plugins,
-    external: opts.external
-  }).then(function (bundle) {
-    var code = bundle.generate({
+    plugins,
+    external: opts.external,
+  }).then(bundle => {
+    const code = bundle.generate({
       format: opts.format,
       moduleName: opts.moduleName,
       sourceMap: opts.sourceMap,
-      banner: opts.banner
+      banner: opts.banner,
     }).code
 
     if (opts.env === 'production') {
-      var minified = (opts.banner ? opts.banner + '\n' : '') + uglify.minify(code, {
-          fromString: true,
-          output: {
-            screw_ie8: true,
-            ascii_only: true
-          },
-          compress: {
-            pure_funcs: ['makeMap']
-          }
-        }).code
+      const minified = (opts.banner ? opts.banner + '\n' : '') + uglify.minify(code, {
+        fromString: true,
+        output: {
+          screw_ie8: true,
+          ascii_only: true,
+        },
+        compress: {
+          pure_funcs: ['makeMap'],
+        },
+      }).code
       return write(opts.out, minified).then(zip(opts.out))
-    } else {
-      return write(opts.out, code)
     }
+    return write(opts.out, code)
   })
 }
 
-function doFinal () {
+function doFinal() {
   delete pkg.private
   delete pkg.devDependencies
   delete pkg.scripts
@@ -125,34 +131,25 @@ function doFinal () {
   fs.writeFileSync('dist/LICENSE.txt', fs.readFileSync('LICENSE.txt', 'utf-8'), 'utf-8')
 }
 
-function write (dest, code) {
-
-  return new Promise(function (resolve, reject) {
-    fs.writeFile(dest, code, function (err) {
-      if (err) return reject(err)
-      console.log(dest.info + ' ' + getSize(code).blue)
-      resolve()
-    })
-  })
-}
-
-function zip (file) {
-  return function () {
-    fs.readFile(file, function (err, buf) {
-      gzipSize(buf, function (error, size) {
-        console.log('当前模块gzip后的大小为(不包括依赖的外部包): '.info + getSize(size).blue)
-      })
-    })
+function build(builds) {
+  let built = 0
+  const total = builds.length
+  function next() {
+    buildEntry(getConfig(builds[built])).then(() => {
+      built += 1
+      if (built < total) {
+        next()
+      } else {
+        doFinal()
+      }
+    }).catch(logError)
   }
+  next()
 }
 
-function getSize (code) {
-  return ((code.length ? code.length : code) / 1024).toFixed(2) + 'kb'
-}
-
-function logError (e) {
-  console.log(e)
-}
-
-
-
+promise.then(() => {
+  if (!fs.existsSync(path.resolve('./dist'))) {
+    fs.mkdirSync(path.resolve('./dist'))
+  }
+  build(['es', 'cjs', 'umd', 'min'])
+})
