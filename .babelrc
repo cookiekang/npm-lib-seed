@@ -1,0 +1,9 @@
+{
+  "presets": [
+    "es2015"
+  ],
+  "exclude": "node_modules/**",
+  "plugins": [
+    "transform-runtime"
+  ]
+}
