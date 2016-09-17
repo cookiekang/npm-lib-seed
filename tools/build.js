@@ -1,16 +1,17 @@
-'use strict';
+import babelrc from 'babelrc-rollup'
+import uglify from 'rollup-plugin-uglify'
+import rollupCommonjs from 'rollup-plugin-commonjs'
+import rollupNpm from 'rollup-plugin-node-resolve'
 
 const fs = require('fs')
 const del = require('del')
 const gzipSize = require('gzip-size')
 const rollup = require('rollup')
-const uglify = require('uglify-js')
 const json = require('rollup-plugin-json')
 const babel = require('rollup-plugin-babel')
 const colors = require('colors')
 const pkg = require('../package.json')
 const path = require('path')
-const babelrc = require('babelrc-rollup').default
 
 colors.setTheme({
   silly: 'rainbow',
@@ -29,12 +30,12 @@ let promise = Promise.resolve()
 // Clean up the output directory
 promise = promise.then(() => del(['dist/*']))
 
-console.log('您当前打包的模块是 '.info + pkg.name.blue)
-console.log('当前版本号是: '.info + pkg.version.blue)
+console.log('您当前打包的模块是 '.info + pkg.name.yellow)
+console.log('当前版本号是: '.info + pkg.version.yellow)
 console.log('当前模块所依赖的外部包: '.info)
 
 Object.keys(pkg.dependencies).forEach(key => {
-  console.log(key.blue)
+  console.log(key.yellow)
 })
 
 const banner =
@@ -43,15 +44,17 @@ const banner =
   ' */'
 
 function getConfig(format) {
+  // 打包成独立min文件时就要包含所有模块的代码
+  let external = format === 'min' ? function () { return false } : Object.keys(pkg.dependencies)
   return {
     entry: 'src/index.js',
     format: format === 'min' ? 'umd' : format,
     out: path.resolve(`dist/${format === 'cjs' ? 'index' : `index.${format}`}.js`),
     banner,
     env: format === 'min' ? 'production' : 'development',
-    moduleName: format === 'umd' ? pkg.name : undefined,
+    moduleName: (format === 'umd' || format === 'min') ? pkg.name : undefined,
     sourceMap: true,
-    external: Object.keys(pkg.dependencies),
+    external,
   }
 }
 
@@ -63,7 +66,7 @@ function write(dest, code) {
   return new Promise((resolve, reject) => {
     fs.writeFile(dest, code, err => {
       if (!err) {
-        console.log(dest.info + ' ' + getSize(code).blue)
+        console.log(dest.info + ' ' + getSize(code).yellow)
         resolve()
       } else {
         reject(err)
@@ -76,7 +79,7 @@ function zip(file) {
   return function () {
     fs.readFile(file, (err, buf) => {
       gzipSize(buf, (error, size) => {
-        console.log('当前模块gzip后的大小为(不包括依赖的外部包): '.info + getSize(size).blue)
+        console.log('当前模块gzip后的大小为(不包括依赖的外部包): '.info + getSize(size).yellow)
       })
     })
   }
@@ -88,10 +91,19 @@ function logError(e) {
 
 function buildEntry(opts) {
   const plugins = [
+    rollupNpm({
+      jsnext: true,
+      main: true
+    }),
     json(),
     babel(babelrc()),
+    rollupCommonjs(),
   ]
-  console.log(opts.format)
+  let isMin = opts.env === 'production'
+  if (isMin) {
+    plugins.push(uglify())
+  }
+
   return rollup.rollup({
     entry: opts.entry,
     plugins,
@@ -103,19 +115,8 @@ function buildEntry(opts) {
       sourceMap: opts.sourceMap,
       banner: opts.banner,
     }).code
-
-    if (opts.env === 'production') {
-      const minified = (opts.banner ? opts.banner + '\n' : '') + uglify.minify(code, {
-        fromString: true,
-        output: {
-          screw_ie8: true,
-          ascii_only: true,
-        },
-        compress: {
-          pure_funcs: ['makeMap'],
-        },
-      }).code
-      return write(opts.out, minified).then(zip(opts.out))
+    if (isMin) {
+      return write(opts.out, code).then(zip(opts.out))
     }
     return write(opts.out, code)
   })

@@ -2,7 +2,7 @@
   "private": true,
   "name": "npm-seed",
   "version": "0.0.0",
-  "description": "A project template for authoring and publishing npm package",
+  "description": "A project for report javascript error and page performance",
   "repository": "4f2e/npm-seed",
   "author": "xingyuzhe <yuzhe.xing@qq.com>",
   "contributors": [
@@ -10,10 +10,11 @@
   ],
   "license": "MIT",
   "keywords": [
-    "npm",
-    "package",
-    "seed",
-    "boilerplate"
+    "javascript",
+    "error",
+    "report",
+    "performance",
+    "page"
   ],
   "main": "index.js",
   "jsnext:main": "index.es.js",
@@ -48,7 +49,7 @@
     "babel-preset-stage-0": "*",
     "babel-register": "*",
     "babelrc-rollup": "*",
-    "bs-html-injector": "^3.0.3",
+    "bs-html-injector": "*",
     "chai": "*",
     "colors": "*",
     "coveralls": "*",
@@ -63,9 +64,11 @@
     "mocha": "*",
     "rollup": "*",
     "rollup-plugin-babel": "*",
+    "rollup-plugin-commonjs": "^5.0.0",
     "rollup-plugin-json": "*",
-    "sinon": "*",
-    "uglify-js": "*"
+    "rollup-plugin-node-resolve": "^2.0.0",
+    "rollup-plugin-uglify": "*",
+    "sinon": "*"
   },
   "scripts": {
     "lint": "eslint src test tools",
@@ -73,12 +76,10 @@
     "test:watch": "mocha --compilers js:babel-register --reporter min --watch",
     "test:cover": "babel-node ./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha",
     "coveralls": "cat ./coverage/lcov.info | coveralls",
-    "build": "node tools/build",
+    "build": "babel-node tools/build",
     "prepublish": "npm run build",
     "publish:docs": "easystatic deploy docs --repo 4f2e/npm-seed",
     "start": "easystatic start docs"
   },
-  "dependencies": {
-    "babel-runtime": "*"
-  }
+  "dependencies": {}
 }
