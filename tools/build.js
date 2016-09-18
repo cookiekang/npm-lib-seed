@@ -79,7 +79,7 @@ function zip(file) {
   return function () {
     fs.readFile(file, (err, buf) => {
       gzipSize(buf, (error, size) => {
-        console.log('当前模块gzip后的大小为(不包括依赖的外部包): '.info + getSize(size).yellow)
+        console.log('当前模块gzip后的大小为(包括所有依赖的外部包): '.info + getSize(size).yellow)
       })
     })
   }
@@ -91,13 +91,20 @@ function logError(e) {
 
 function buildEntry(opts) {
   const plugins = [
+    // 这里必须放在最前面, 先把一些非commonjs格式的包转成rollup识别的commonjs格式
+    // rollup把爹坑死了
+    rollupCommonjs(),
+    // 这个插件是为了合并从npm中import进来的包, 打包成独立的min.js用到
+    // 因为rollup主体是不会把npm里面的包打包进去的
+    // rollup把爹坑死了
     rollupNpm({
       jsnext: true,
       main: true
     }),
     json(),
+    // 这里必须用这个插件 是因为官网示例的 presents-rollup 本身是有问题的, 直接使用根本运行不了
+    // rollup把爹坑死了
     babel(babelrc()),
-    rollupCommonjs(),
   ]
   let isMin = opts.env === 'production'
   if (isMin) {
