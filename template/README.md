@@ -1,6 +1,4 @@
-# Npm lib seed
-
-A seed project for helping you easily bundle/debug/test/publish your libraries
+# Babel Starter Kit
 
 [![NPM version](http://img.shields.io/npm/v/generator-javascript.svg?style=flat-square)](https://www.npmjs.com/package/generator-javascript)
 [![NPM downloads](http://img.shields.io/npm/dm/generator-javascript.svg?style=flat-square)](https://www.npmjs.com/package/generator-javascript)

@@ -52,7 +52,7 @@ function getConfig(format) {
     out: path.resolve(`dist/${format === 'cjs' ? 'index' : `index.${format}`}.js`),
     banner,
     env: format === 'min' ? 'production' : 'development',
-    moduleName: (format === 'umd' || format === 'min') ? pkg.name : undefined,
+    moduleName: (format === 'umd' || format === 'min') ? pkg.name.split('-').join('_') : undefined,
     sourceMap: true,
     external,
   }

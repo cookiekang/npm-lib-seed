@@ -14,17 +14,19 @@ var shell = require('shelljs');
 var inquirer = require("inquirer");
 var colors = require('colors');
 var pkg = require('../package.json');
-var template = path.join(path.dirname(__dirname), 'template');
+var template = path.join(__dirname, '../template');
 
 program.version(pkg.version);
 program
   .command('init <name>')
   .action(function (name) {
-    var cwd = process.cwd(),
-      modulepath = path.join(cwd, name),
-      user = {};
-    user['name'] = shell.exec('npm whoami', {silent: true}).output.trim();
+    console.log(name)
+    var cwd = process.cwd()
+    var modulepath = path.join(cwd, name)
+    var user = {};
 
+    user['name'] = shell.exec('npm whoami', {silent: true}).stdout.trim();
+    console.log(modulepath)
     inquirer.prompt([
       {
         type: 'input',
@@ -37,8 +39,9 @@ program
           return true;
         }
       }
-    ], function (answer) {
+    ]).then(function (answer) {
       user['email'] = answer.email;
+      console.log(answer)
       shell.exec('cp -rf ' + template + ' ' + modulepath);
       ndir.walk(modulepath, function onDir(dirpath, files) {
         var basedirname = path.basename(dirpath);
@@ -68,7 +71,7 @@ program
       }, function error(err, errPath) {
         console.error('%s error: %s', errPath, err);
       });
-    });
+    })
 
 
   });
