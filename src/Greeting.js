@@ -10,13 +10,13 @@
 class Greeting {
 
   constructor(name) {
-    this.name = name || 'Guest';
+    this.name = name || 'Guest'
   }
 
   hello() {
-    return `Welcome, ${this.name}!`;
+    return `Welcome, ${this.name}!`
   }
 
 }
 
-export default Greeting;
+export default Greeting

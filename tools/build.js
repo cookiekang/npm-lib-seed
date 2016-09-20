@@ -99,7 +99,7 @@ function buildEntry(opts) {
     // rollup把爹坑死了
     rollupNpm({
       jsnext: true,
-      main: true
+      main: true,
     }),
     json(),
     // 这里必须用这个插件 是因为官网示例的 presents-rollup 本身是有问题的, 直接使用根本运行不了
