@@ -1,5 +1,7 @@
 # Npm lib seed
 
+[![Join the chat at https://gitter.im/4f2e/npm-lib-seed](https://badges.gitter.im/4f2e/npm-lib-seed.svg)](https://gitter.im/4f2e/npm-lib-seed?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 A seed project for helping you easily bundle/debug/test/publish your libraries
 
 [![NPM version](http://img.shields.io/npm/v/generator-javascript.svg?style=flat-square)](https://www.npmjs.com/package/generator-javascript)
