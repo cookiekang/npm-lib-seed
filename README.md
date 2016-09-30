@@ -1,9 +1,9 @@
 # Npm lib seed
 
 This project build base off [Babel Starter Kit](https://github.com/kriasoft/babel-starter-kit).
-Original project version wasn't work well and fully applicable for me, and it seem as if it's not alive, so fixed some things and add some features for myself and made Closure Compiler compatible, so there's probably some differences.
+Original project version wasn't work well and fully applicable for me, and it seem as if it's not alive, so fixed some things and add some features for myself, so there's probably some differences. This project is build for helping you to stay productive following the best practices. A solid starting point for both professionals and newcomers to the industry. It will keep up to date and alive as much as possible.
 
-> Npm lib seed is a project template for helping you easily bundle/debug/test/publish your libraries
+> Npm lib seed is a project template for helping you easily bundle/debug/test/publish your Javascript libraries
 
 ### Features
 
