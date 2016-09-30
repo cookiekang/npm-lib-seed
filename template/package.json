@@ -1,8 +1,14 @@
 {
   "name": "npm-lib-seed",
   "version": "0.0.0",
-  "description": "A project for report javascript error and page performance",
-  "repository": "4f2e/npm-lib-seed",
+  "description": "A seed project for helping you easily bundle/debug/test/publish your npm libraries",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/4f2e/npm-lib-seed"
+  },
+  "bugs": {
+    "url": "https://github.com/4f2e/npm-lib-seed/issues"
+  },
   "author": "xingyuzhe <yuzhe.xing@qq.com>",
   "contributors": [
     "xingyuzhe <yuzhe.xing@qq.com>"
@@ -77,9 +83,6 @@
     "url-loader": "^0.5.7",
     "webpack": "^1.13.2",
     "webpack-dev-server": "^1.16.1"
-  },
-  "bin": {
-    "npm-lib-seed": "./bin/npm-lib-seed.js"
   },
   "scripts": {
     "lint": "eslint src test tools",

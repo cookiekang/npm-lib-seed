@@ -1,18 +1,17 @@
 ---
-id: bsk:getting-started
-title: Getting Started ∙ Babel Starter Kit
+id: nls:getting-started
+title: Getting Started ∙ Npm Lib Seed
 ---
 
 # Getting Started
 
+## Install
 For better experience, make sure that you have `npm v3+` installed. Start by cloning this repo and
 installing project dependencies:
 
 ```sh
-$ git clone -o babel-starter-kit \
-      -b master --single-branch \
-      https://github.com/kriasoft/babel-starter-kit.git \
-      <your-project-name>
+npm install npm-lib-seed -g
+npm-lib-seed init <your project name>
 $ cd <your-project-name>
 $ npm install
 ```
@@ -31,9 +30,12 @@ $ cd <your-project-name>
 $ yo javascript
 ```
 
+## How to debug
+Running `npm run server` will start a server for helping you debug your code in browser. 
+
 ### How to Build
 
-Running `npm run build` will compile source files to a distributable format (CommonJS, ES6 and UMD)
+Running `npm run build` will compile source files to a distributable format (CommonJS, ES6 and UMD and Var)
 ready to be published to NPM from the `dist` folder. See `tools/build.js` for more info.
 
 ### How to Test

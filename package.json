@@ -2,7 +2,13 @@
   "name": "npm-lib-seed",
   "version": "0.0.2",
   "description": "A seed project for helping you easily bundle/debug/test/publish your npm libraries",
-  "repository": "4f2e/npm-lib-seed",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/4f2e/npm-lib-seed"
+  },
+  "bugs": {
+    "url": "https://github.com/4f2e/npm-lib-seed/issues"
+  },
   "author": "xingyuzhe <yuzhe.xing@qq.com>",
   "contributors": [
     "xingyuzhe <yuzhe.xing@qq.com>"
@@ -12,6 +18,7 @@
     "npm",
     "lib",
     "package",
+    "template",
     "seed",
     "starter",
     "boilerplate"
