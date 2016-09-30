@@ -1,5 +1,7 @@
 # Npm lib seed
 
+[![Join the chat at https://gitter.im/4f2e/npm-lib-seed](https://badges.gitter.im/4f2e/npm-lib-seed.svg)](https://gitter.im/4f2e/npm-lib-seed?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 This project build base off [Babel Starter Kit](https://github.com/kriasoft/babel-starter-kit).
 Original project version wasn't work well and fully applicable for me, and it seem as if it's not alive, so fixed some things and add some features for myself, so there's probably some differences. This project is build for helping you to stay productive following the best practices. A solid starting point for both professionals and newcomers to the industry. It will keep up to date and alive as much as possible.
 
