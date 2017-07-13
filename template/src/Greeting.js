@@ -1,11 +1,17 @@
 /**
- * Babel Starter Kit (https://www.kriasoft.com/babel-starter-kit)
+ * 函数功能简述
  *
- * Copyright © 2015-2016 Kriasoft, LLC. All rights reserved.
+ * 具体描述一些细节
  *
- * This source code is licensed under the MIT license found in the
- * LICENSE.txt file in the root directory of this source tree.
- */
+ * @constructor
+ *
+ * @param    {string}  name - 名稱
+ * @returns  void
+ *
+ * @date     2017-07-12
+ * @author   ben.kang<ben.kang@dji.com>
+ **/
+
 
 class Greeting {
   constructor(name) {
