@@ -45,7 +45,7 @@ const banner =
 
 function getConfig(format) {
   // 打包成独立min文件时就要包含所有模块的代码
-  let external = format === 'min' ? function () { return false } : Object.keys(pkg.dependencies)
+  let external = format === 'min' ? () => false : Object.keys(pkg.dependencies)
   return {
     entry: 'src/index.js',
     format: format === 'min' ? 'umd' : format,
@@ -76,7 +76,7 @@ function write(dest, code) {
 }
 
 function zip(file) {
-  return function () {
+  return () => {
     fs.readFile(file, (err, buf) => {
       gzipSize(buf, (error, size) => {
         console.log('当前模块gzip后的大小为(包括所有依赖的外部包): '.info + getSize(size).yellow)

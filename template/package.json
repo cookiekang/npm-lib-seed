@@ -11,7 +11,8 @@
   },
   "author": "xingyuzhe <yuzhe.xing@qq.com>",
   "contributors": [
-    "xingyuzhe <yuzhe.xing@qq.com>"
+    "xingyuzhe <yuzhe.xing@qq.com>",
+    "cookiekang <ben.kang@dji.com>"
   ],
   "license": "MIT",
   "keywords": [
@@ -21,28 +22,19 @@
     "performance",
     "page"
   ],
-  "main": "index.js",
-  "jsnext:main": "index.es.js",
-  "eslintConfig": {
-    "parser": "babel-eslint",
-    "extends": "airbnb/base",
-    "rules": {
-      "import/no-mutable-exports": 0,
-      "import/no-extraneous-dependencies": 0,
-      "semi": 0,
-      "arrow-parens": 0,
-      "prefer-template": 0,
-      "no-underscore-dangle": 0,
-      "prefer-const": 0,
-      "no-param-reassign": 0,
-      "prefer-rest-params": 0,
-      "no-restricted-syntax": [
-        "error",
-        "LabeledStatement",
-        "WithStatement"
-      ]
+  "pre-commit": [
+    "precommit-msg",
+    "lint-staged"
+  ],
+  "lint-staged": {
+    "linters": {
+      "src/**/*.js": "eslint",
+      "tools/**/*.js": "eslint",
+      "test/**/*.js": "eslint"
     }
   },
+  "main": "index.js",
+  "jsnext:main": "index.es.js",
   "devDependencies": {
     "babel-cli": "*",
     "babel-core": "^6.14.0",
@@ -71,8 +63,10 @@
     "file-loader": "^0.9.0",
     "gzip-size": "*",
     "istanbul": "*",
+    "lint-staged": "^4.0.0",
     "mocha": "*",
     "postcss-loader": "^0.13.0",
+    "pre-commit": "^1.2.2",
     "rollup": "*",
     "rollup-plugin-babel": "*",
     "rollup-plugin-commonjs": "^5.0.0",
@@ -86,6 +80,8 @@
   },
   "scripts": {
     "lint": "eslint src test tools",
+    "precommit-msg": "echo 'Pre-commit checks...' && exit 0",
+    "lint-staged": "lint-staged",
     "test": "mocha --compilers js:babel-register",
     "test:watch": "mocha --compilers js:babel-register --reporter min --watch",
     "test:cover": "babel-node ./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha",
