@@ -19,4 +19,4 @@ class Greeting {
 
 }
 
-export default Greeting
+module.exports = Greeting;

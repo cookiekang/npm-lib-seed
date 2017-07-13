@@ -89,7 +89,6 @@
     "test": "mocha --compilers js:babel-register",
     "test:watch": "mocha --compilers js:babel-register --reporter min --watch",
     "test:cover": "babel-node ./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha",
-    "coveralls": "cat ./coverage/lcov.info | coveralls",
     "build": "babel-node tools/build",
     "prepublish": "npm run build",
     "publish:docs": "easystatic deploy docs --repo 4f2e/npm-lib-seed",
