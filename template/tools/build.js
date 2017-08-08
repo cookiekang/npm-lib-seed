@@ -111,17 +111,20 @@ function buildEntry(opts) {
     plugins.push(uglify())
   }
 
+
   return rollup.rollup({
     entry: opts.entry,
     plugins,
     external: opts.external,
   }).then(bundle => {
-    const code = bundle.generate({
+    return bundle.generate({
       format: opts.format,
       moduleName: opts.moduleName,
       sourceMap: opts.sourceMap,
       banner: opts.banner,
-    }).code
+    })
+  }).then(res => {
+    const code = res.code
     if (isMin) {
       return write(opts.out, code).then(zip(opts.out))
     }
