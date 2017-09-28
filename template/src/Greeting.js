@@ -9,7 +9,7 @@
  * @returns  void
  *
  * @date     2017-07-12
- * @author   ben.kang<ben.kang@dji.com>
+ * @author   konce<kxj0206@gmail.com>
  **/
 
 
